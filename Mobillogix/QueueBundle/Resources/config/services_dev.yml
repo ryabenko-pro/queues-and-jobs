@@ -1,0 +1,7 @@
+services:
+
+  mobillogix_common.task_queue.service:
+    class: Mobillogix\QueueBundle\Service\TaskSimpleExecutorService
+    arguments:
+      - @service_container
+      - @logger

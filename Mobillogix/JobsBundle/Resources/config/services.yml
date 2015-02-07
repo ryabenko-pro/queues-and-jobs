@@ -1,0 +1,57 @@
+services:
+
+  mobillogix.catalogue.repository.job:
+    class: Mobillogix\JobsBundle\Repository\JobRepository
+    factory_service: doctrine.orm.catalogue_entity_manager
+    factory_method: getRepository
+    arguments:
+      - "Mobillogix\JobsBundle\Entity\Job"
+
+  mobillogix.catalogue.repository.job_type:
+    class: Mobillogix\JobsBundle\Repository\JobTypeRepository
+    factory_service: doctrine.orm.catalogue_entity_manager
+    factory_method: getRepository
+    arguments:
+      - "Mobillogix\JobsBundle\Entity\JobType"
+
+  mobillogix.catalogue.repository.job_package:
+    class: Mobillogix\JobsBundle\Repository\JobPackageRepository
+    factory_service: doctrine.orm.catalogue_entity_manager
+    factory_method: getRepository
+    arguments:
+      - "Mobillogix\JobsBundle\Entity\JobPackage"
+
+  mobillogix.catalogue.repository.job_event:
+    class: Mobillogix\JobsBundle\Repository\JobEventRepository
+    factory_service: doctrine.orm.catalogue_entity_manager
+    factory_method: getRepository
+    arguments:
+      - "Mobillogix\JobsBundle\Entity\JobEvent"
+
+  job_persistence.service:
+    class: Mobillogix\JobsBundle\Service\Persistence\JobPersistenceService
+    public: false
+    arguments:
+      - @doctrine.orm.catalogue_entity_manager
+      - %jobs.types%
+
+  job_process_persistence.service:
+    class: Mobillogix\JobsBundle\Service\Persistence\JobProcessPersistenceService
+    public: false
+    arguments:
+      - @doctrine.orm.catalogue_entity_manager
+      - %jobs.types%
+
+  job_planner.service:
+    class: Mobillogix\JobsBundle\Service\JobPlannerService
+    arguments:
+      - @service_container
+      - @job_persistence.service
+      - @job_process_persistence.service
+      - %jobs.types%
+
+  process_executor.service:
+    class: Mobillogix\JobsBundle\Service\ProcessExecutorService
+    arguments:
+      - @job_process_persistence.service
+      - @service_container

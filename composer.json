@@ -1,0 +1,17 @@
+{
+    "name": "mobillogix/queues-and-jobs",
+    "type": "symfony-bundle",
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-0": {
+            "Mobillogix\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
