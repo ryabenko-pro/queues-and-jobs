@@ -8,11 +8,11 @@
     Types filter:
     {% for key, type in types %}
         {% if type_filter == key %}
-            <a class="btn btn-primary" href="{{ path('mobillogix_common_task_queue_index') }}">
+            <a class="btn btn-primary" href="{{ path('mobillogix_queue_task_index') }}">
                 {{ type.name }} <span class="badge"><i class="glyphicon glyphicon-remove-sign"></i></span>
             </a>
         {% else %}
-            <a class="btn btn-default" href="{{ path('mobillogix_common_task_queue_index', {type: key}) }}">{{ type.name }}</a>
+            <a class="btn btn-default" href="{{ path('mobillogix_queue_task_index', {type: key}) }}">{{ type.name }}</a>
         {% endif %}
     {% endfor %}
 

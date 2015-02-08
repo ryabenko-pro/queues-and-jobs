@@ -21,9 +21,9 @@ class QueueController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $types = $this->container->getParameter('mobillogix_common.task_types');
+        $types = $this->container->getParameter('mobillogix_queue.task_types');
 
-        $qb = $this->get('mobillogix_common.repository.queued_task')->createQueryBuilder("qt");
+        $qb = $this->get('mobillogix_queue.repository.queued_task')->createQueryBuilder("qt");
 
         $type = $request->get('type');
         if ($type) {

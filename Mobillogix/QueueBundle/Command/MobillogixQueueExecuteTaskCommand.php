@@ -22,7 +22,7 @@ class MobillogixQueueExecuteTaskCommand extends BaseSingleCommand
 
     protected function beforeStart()
     {
-        $this->service = $this->getContainer()->get('mobillogix_common.task_queue.service');
+        $this->service = $this->getContainer()->get('mobillogix_queue.task_queue.service');
     }
 
     /**
@@ -42,7 +42,7 @@ class MobillogixQueueExecuteTaskCommand extends BaseSingleCommand
                 throw new \Exception("Ids can not be used with 'permanent' option");
             }
 
-            $entities = $this->getContainer()->get('mobillogix_common.repository.queued_task')->findByIds($ids);
+            $entities = $this->getContainer()->get('mobillogix_queue.repository.queued_task')->findByIds($ids);
             foreach ($entities as $entity) {
                 $task = $this->service->mapEntityToTask($entity);
                 $this->service->executeTask($task);

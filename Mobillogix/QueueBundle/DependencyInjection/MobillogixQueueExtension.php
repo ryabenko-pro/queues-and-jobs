@@ -23,7 +23,7 @@ class MobillogixQueueExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter("mobillogix_common.task_types", $config['types']);
+        $container->setParameter("mobillogix_queue.task_types", $config['types']);
 
         $container->setParameter('mobillogix_queue.base_template', $config['template']);
 

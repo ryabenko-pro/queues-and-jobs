@@ -29,7 +29,7 @@ class MobillogixQueueCreateTaskCommand extends ContainerAwareCommand
         $type = $input->getArgument('type');
         $data = (array)@json_decode($input->getArgument('data'));
 
-        $service = $this->getContainer()->get('mobillogix_common.task_queue.service');
+        $service = $this->getContainer()->get('mobillogix_queue.task_queue.service');
 
         $id = $service->addTask(AbstractTask::create($type, $data));
 

@@ -1,14 +1,14 @@
 services:
-  mobillogix_common.repository.queued_task:
+  mobillogix_queue.repository.queued_task:
     class: Mobillogix\QueueBundle\Repository\QueuedTaskRepository
     factory_service: doctrine.orm.entity_manager
     factory_method: getRepository
     arguments:
       - "Mobillogix\QueueBundle\Entity\QueuedTask"
 
-  mobillogix_common.task_queue.service:
+  mobillogix_queue.task_queue.service:
     class: Mobillogix\QueueBundle\Service\TaskQueueService
     arguments:
       - @service_container
-      - @mobillogix_common.repository.queued_task
-      - %mobillogix_common.task_types%
+      - @mobillogix_queue.repository.queued_task
+      - %mobillogix_queue.task_types%

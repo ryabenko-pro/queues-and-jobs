@@ -47,9 +47,9 @@ class JobPersistenceService
         $this->em = $em;
         $this->config = $config;
 
-        $this->jobTypeRepository = $em->getRepository('CommonJobsBundle:JobType');
-        $this->jobRepository = $em->getRepository('CommonJobsBundle:Job');
-        $this->jobEventRepository = $em->getRepository('CommonJobsBundle:JobEvent');
+        $this->jobTypeRepository = $em->getRepository('MobillogixJobsBundle:JobType');
+        $this->jobRepository = $em->getRepository('MobillogixJobsBundle:Job');
+        $this->jobEventRepository = $em->getRepository('MobillogixJobsBundle:JobEvent');
     }
 
     /**

@@ -1,4 +1,4 @@
-mobillogix_common_task_queue_index:
+mobillogix_queue_task_index:
     pattern: /queued-tasks
     methods: [GET]
     defaults:

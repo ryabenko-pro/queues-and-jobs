@@ -69,7 +69,7 @@ class JobPlannerService
 
         ob_start();
         $job->runPlanning($this->container);
-        $this->addLog($job);
+        $this->addLog($job, 'planning');
 
         $processes = $job->getProcesses();
 
@@ -92,7 +92,7 @@ class JobPlannerService
         try {
             ob_start();
             $job->onFinish($this->container);
-            $this->addLog($job);
+            $this->addLog($job, 'finish');
 
             if (!$job->isNeedsPlanning()) {
                 $this->jobPersistence->markJobDone($job);
@@ -105,7 +105,7 @@ class JobPlannerService
                 $this->jobPersistence->addEvent($event);
             }
         } catch (\Exception $exception) {
-            $this->addLog($job);
+            $this->addLog($job, 'finish');
 
             $event = new JobEvent();
             $event->setJob($job->getEntity())
@@ -130,7 +130,7 @@ class JobPlannerService
     /**
      * @param BaseJob $job
      */
-    protected function addLog(BaseJob $job)
+    protected function addLog(BaseJob $job, $eventType)
     {
         $output = ob_get_contents();
         $output = trim($output);
@@ -140,7 +140,7 @@ class JobPlannerService
             $event = new JobEvent();
             $event->setJob($job->getEntity())
                 ->setType(JobEvent::TYPE_LOG)
-                ->setMessage("On finish: " . $output);
+                ->setMessage("On {$eventType}: " . $output);
 
             $this->processPersistence->addEvent($event);
         }

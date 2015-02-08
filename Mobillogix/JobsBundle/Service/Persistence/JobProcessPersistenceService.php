@@ -43,9 +43,9 @@ class JobProcessPersistenceService
         $this->em = $em;
         $this->config = $config;
 
-        $this->jobPackageRepository = $em->getRepository('CommonJobsBundle:JobPackage');
-        $this->jobEventRepository = $em->getRepository('CommonJobsBundle:JobEvent');
-        $this->jobRepository = $em->getRepository('CommonJobsBundle:Job');
+        $this->jobPackageRepository = $em->getRepository('MobillogixJobsBundle:JobPackage');
+        $this->jobEventRepository = $em->getRepository('MobillogixJobsBundle:JobEvent');
+        $this->jobRepository = $em->getRepository('MobillogixJobsBundle:Job');
     }
 
     public function markPackageStarted(BaseProcess $process)

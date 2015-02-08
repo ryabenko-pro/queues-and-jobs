@@ -208,7 +208,7 @@ class JobPlannerServiceTest extends BaseJobsTestCase
         $event = new JobEvent();
         $event->setJob($entity)
             ->setType($event::TYPE_LOG)
-            ->setMessage("On planing: Hello from planning");
+            ->setMessage("On planning: Hello from planning");
 
         $container = new Container();
 
@@ -221,6 +221,7 @@ class JobPlannerServiceTest extends BaseJobsTestCase
                     'name' => 'Echo',
                     'job_class' => 'EchoJob',
                     'process_class' => 'EchoProcess',
+                    'packages_chunk'    => 10,
                 ]
             ],
         ]);
@@ -265,7 +266,7 @@ class EchoJob extends BaseJob
     /**
      * Creating processes for incoming data
      * @param ContainerInterface $container
-     * @return boolean True if need more planing, false if no more planning needed
+     * @return boolean True if need more planning, false if no more planning needed
      */
     protected function doPlan(ContainerInterface $container)
     {

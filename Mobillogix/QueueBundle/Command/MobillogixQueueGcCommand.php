@@ -21,7 +21,7 @@ class MobillogixQueueGcCommand extends BaseSingleCommand
 
     protected function beforeStart()
     {
-        $this->repository = $this->getContainer()->get('mobillogix_common.repository.queued_task');
+        $this->repository = $this->getContainer()->get('mobillogix_queue.repository.queued_task');
     }
 
     /**
