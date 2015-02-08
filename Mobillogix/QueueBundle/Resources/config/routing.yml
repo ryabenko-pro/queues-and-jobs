@@ -1,5 +1,0 @@
-mobillogix_queue_task_index:
-    pattern: /queued-tasks
-    methods: [GET]
-    defaults:
-        _controller: MobillogixQueueBundle:Queue:index

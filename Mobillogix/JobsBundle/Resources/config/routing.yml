@@ -1,4 +1,0 @@
-jobs_dashboard:
-    type: annotation
-    resource: @MobillogixJobsBundle/Controller/
-
