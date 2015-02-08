@@ -3,7 +3,7 @@
 {% block job_details %}
 
     Types filter:
-    {% for type in types %}
+    {% for type in event_types %}
         {% if type_filter == type.type %}
             <a class="btn btn-small btn-primary" href="{{ path('jobs_show_events', {id: job.id}|merge(package_id ? {package_id: package_id} : {})) }}">
                 {{ type.type }} ({{ type.count }}) <span class="badge"><i class="glyphicon glyphicon-remove"></i></span>

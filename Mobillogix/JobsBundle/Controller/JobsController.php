@@ -82,6 +82,7 @@ class JobsController extends Controller
         $jobEventRepository = $this->get('mobillogix.catalogue.repository.job_event');
 
         $events = $jobEventRepository->getEventsQueryBuilder($job);
+        $eventTypes = $jobEventRepository->getEventsTypes($job);
 
         $type = $request->get('type');
         if ($type) {
@@ -104,6 +105,7 @@ class JobsController extends Controller
         return $this->buildResponse([
             'job'   => $job,
             'events'  => $pager,
+            'event_types'   => $eventTypes,
             'type_filter' => $type,
             'package_id' => $packageId,
         ]);
