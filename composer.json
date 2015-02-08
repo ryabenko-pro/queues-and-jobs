@@ -1,5 +1,5 @@
 {
-    "name": "mobillogix/queues-and-jobs",
+    "name": "mobillogix-launchpad/queues-and-jobs",
     "type": "symfony-bundle",
     "require": {
         "php": ">=5.3.2"
