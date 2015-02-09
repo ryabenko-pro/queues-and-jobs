@@ -4,7 +4,6 @@ namespace Mobillogix\Launchpad\JobsBundle\Model;
 
 
 use Mobillogix\Launchpad\JobsBundle\Entity\JobPackage;
-use Mobillogix\Launchpad\JobsBundle\Exception\MobillogixJobsException;
 use Mobillogix\Launchpad\JobsBundle\Interfaces\ProcessExecutorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -52,18 +51,18 @@ abstract class BaseProcess
                 $this->doExecute($package, $container);
 
                 $this->logOutput($executor, $counter);
-            } catch (MobillogixJobsException $exception) {
+            } catch (\PHPUnit_Framework_ExpectationFailedException $exception) {
+                $this->logOutput($executor, $counter);
+
+                // For unit tests only
+                throw $exception;
+            } catch (\Exception $exception) {
                 $this->logOutput($executor, $counter);
 
                 $executor->addError($this,
                     $counter,
                     sprintf("Error while executing task: '%s'", $exception->getMessage())
                 );
-            } catch (\PHPUnit_Framework_ExpectationFailedException $exception) {
-                $this->logOutput($executor, $counter);
-
-                // For unit tests only
-                throw $exception;
             }
         }
     }
