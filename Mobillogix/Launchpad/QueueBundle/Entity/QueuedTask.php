@@ -4,10 +4,12 @@
 namespace Mobillogix\Launchpad\QueueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Table(name="queue_task")
- * @ORM\Entity(repositoryClass="Mobillogix\Launchpad\JobsBundle\Repository\JobRepository")
+ * @ORM\Table(name="queued_task")
+ * @ORM\Entity(repositoryClass="Mobillogix\Launchpad\QueueBundle\Repository\QueuedTaskRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class QueuedTask
 {
@@ -53,19 +55,20 @@ class QueuedTask
     protected $data;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $log;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="planned_at", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
      * @ORM\Column(name="started_at", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
      */
     protected $startedAt;
 
@@ -80,6 +83,14 @@ class QueuedTask
      * @ORM\Column(name="finished_at", type="datetime", nullable=true)
      */
     protected $finishedAt;
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     /**
      * @return mixed

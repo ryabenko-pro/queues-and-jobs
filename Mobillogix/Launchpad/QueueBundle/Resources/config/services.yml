@@ -13,9 +13,12 @@ services:
     arguments:
       - Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask
 
-  mobillogix_launchpad.queue.task_queue.service:
+  mobillogix_launchpad.queue.task_queue.service_database:
     class: Mobillogix\Launchpad\QueueBundle\Service\TaskQueueService
     arguments:
       - @service_container
       - @mobillogix_launchpad.queue.repository.queued_task
       - %mobillogix_launchpad.queue.task_types%
+
+  mobillogix_launchpad.queue.task_queue.service:
+    alias: mobillogix_launchpad.queue.task_queue.service_database

@@ -22,7 +22,7 @@ class MobillogixQueueExecuteTaskCommand extends BaseSingleCommand
 
     protected function beforeStart()
     {
-        $this->service = $this->getContainer()->get('mobillogix_launchpad.queue.task_queue.service');
+        $this->service = $this->getContainer()->get('mobillogix_launchpad.queue.task_queue.service_database');
     }
 
     /**

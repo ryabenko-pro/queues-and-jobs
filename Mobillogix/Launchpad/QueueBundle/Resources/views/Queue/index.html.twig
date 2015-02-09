@@ -33,7 +33,7 @@
         </thead>
         <tbody>
         {% for task in tasks %}
-            <tr class="task-{{ task.status }}">
+            <tr class="task-{{ task.state }}">
                 <td>{{ task.id }}</td>
                 <td>
                     <strong>{{ task.type }}</strong><br>
