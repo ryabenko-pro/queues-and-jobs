@@ -67,6 +67,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
 
         $lastStartTs = time();
         $this->doExecute($input, $output);
+        $this->cycles++;
 
         if (!$input->getOption("permanent")) {
             return;

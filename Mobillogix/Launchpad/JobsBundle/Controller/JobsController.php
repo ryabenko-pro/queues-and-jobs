@@ -7,7 +7,6 @@ namespace Mobillogix\Launchpad\JobsBundle\Controller;
 use Mobillogix\Launchpad\JobsBundle\Entity\Job;
 use Mobillogix\Launchpad\JobsBundle\Entity\JobEvent;
 use Mobillogix\Launchpad\JobsBundle\Entity\JobPackage;
-use Mobillogix\Launchpad\JobsBundle\Entity\JobType;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -50,7 +49,7 @@ class JobsController extends Controller
     /**
      * Show packages
      * @Route("/{id}", name="jobs_show", requirements={"id"="\d+"})
-     * @Template("@MobillogixJobs/Jobs/packages.html.twig")
+     * @Template("MobillogixLaunchpadJobsBundle:Jobs:packages.html.twig")
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */

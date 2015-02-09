@@ -31,12 +31,17 @@ class JobPackageRepository extends EntityRepository
     public function getPackagesForRun($limit)
     {
         $em = $this->getEntityManager();
+        $driver = $em->getConnection()->getDriver()->getName();
+
         $em->beginTransaction();
 
-        // Select ids with FOR UPDATE OF
+        // Postgres requires implicit table name
+        $forUpdateOf = 'pdo_pgsql' == $driver ? 'OF p' : '';
+
+        // Select ids with FOR UPDATE
         $q = "SELECT p.id FROM job_package p LEFT JOIN job j ON p.job_id = j.id
               LEFT JOIN job_type jt ON j.job_type_id = jt.id WHERE p.status = :status
-              ORDER BY jt.priority DESC LIMIT :limit FOR UPDATE OF p";
+              ORDER BY jt.priority DESC LIMIT :limit FOR UPDATE {$forUpdateOf}";
 
         $st = $em->getConnection()->prepare($q);
         $st->bindValue('status', JobPackage::STATUS_NEW);
