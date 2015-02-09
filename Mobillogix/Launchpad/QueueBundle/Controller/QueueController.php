@@ -21,9 +21,9 @@ class QueueController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $types = $this->container->getParameter('mobillogix_queue.task_types');
+        $types = $this->container->getParameter('mobillogix_launchpad.queue.task_types');
 
-        $qb = $this->get('mobillogix_queue.repository.queued_task')->createQueryBuilder("qt");
+        $qb = $this->get('mobillogix_launchpad.queue.repository.queued_task')->createQueryBuilder("qt");
 
         $type = $request->get('type');
         if ($type) {
@@ -36,7 +36,7 @@ class QueueController extends Controller
         $pager->setMaxPerPage(max(5, min(50, (integer) $request->query->get('per_page', 20))));
 
         return [
-            'base_template' => $this->container->getParameter('mobillogix_queue.base_template'),
+            'base_template' => $this->container->getParameter('mobillogix_launchpad.queue.base_template'),
             'types' => $types,
             'type_filter'  => $type,
             'tasks'  => $pager,

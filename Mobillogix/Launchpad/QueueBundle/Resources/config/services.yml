@@ -4,18 +4,18 @@ services:
     public: false
     class: Mobillogix\Launchpad\Common\Factory\RepositoryFactory
     arguments:
-      - "@=service(parameter('mobillogix_queue.entity_manager'))"
+      - "@=service(parameter('mobillogix_launchpad.queue.entity_manager'))"
 
-  mobillogix_queue.repository.queued_task:
+  mobillogix_launchpad.queue.repository.queued_task:
     class: Mobillogix\Launchpad\QueueBundle\Repository\QueuedTaskRepository
     factory_service: mobillogix.catalogue.queue_repository_factory
     factory_method: getRepository
     arguments:
       - Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask
 
-  mobillogix_queue.task_queue.service:
+  mobillogix_launchpad.queue.task_queue.service:
     class: Mobillogix\Launchpad\QueueBundle\Service\TaskQueueService
     arguments:
       - @service_container
-      - @mobillogix_queue.repository.queued_task
-      - %mobillogix_queue.task_types%
+      - @mobillogix_launchpad.queue.repository.queued_task
+      - %mobillogix_launchpad.queue.task_types%
