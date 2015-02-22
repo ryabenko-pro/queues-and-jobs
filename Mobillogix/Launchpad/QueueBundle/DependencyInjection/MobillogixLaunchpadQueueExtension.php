@@ -23,10 +23,10 @@ class MobillogixLaunchpadQueueExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter("mobillogix_queue.task_types", $config['types']);
+        $container->setParameter("mobillogix_launchpad.queue.task_types", $config['types']);
 
-        $container->setParameter('mobillogix_queue.base_template', $config['template']);
-        $container->setParameter('mobillogix_queue.entity_manager', $config['em']);
+        $container->setParameter('mobillogix_launchpad.queue.base_template', $config['template']);
+        $container->setParameter('mobillogix_launchpad.queue.entity_manager', $config['em']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
