@@ -57,7 +57,10 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
             return;
         }
 
-        file_put_contents($this->getPidFilename(), getmypid());
+        $pidFilename = $this->getPidFilename();
+        if (false === file_put_contents($pidFilename, getmypid())) {
+            throw new \Exception("Can't write pid file '{$pidFilename}'");
+        }
 
         $this->memoryLimit = $input->getOption('memory-limit');
         $this->cyclesLimit = intval($input->getOption('cycles-limit'));
