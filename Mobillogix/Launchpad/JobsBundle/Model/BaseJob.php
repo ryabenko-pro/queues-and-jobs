@@ -4,6 +4,7 @@ namespace Mobillogix\Launchpad\JobsBundle\Model;
 
 
 use Mobillogix\Launchpad\JobsBundle\Entity\Job;
+use Mobillogix\Launchpad\JobsBundle\Exception\MobillogixJobsException;
 use Mobillogix\Launchpad\JobsBundle\Util\Options;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -16,6 +17,7 @@ abstract class BaseJob
     protected $options;
 
     protected $processes = array();
+    protected $processesOptions;
 
     /** @var Job */
     protected $entity = null;
@@ -73,6 +75,33 @@ abstract class BaseJob
     {
         $this->nextPlanningAt = $nextPlanningAt;
 
+        return $this;
+    }
+
+    /**
+     * @return Options
+     */
+    public function getProcessesOptions()
+    {
+        return $this->processesOptions;
+    }
+
+    /**
+     * @param array|Options $processesOptions
+     * @return BaseJob
+     * @throws MobillogixJobsException
+     */
+    public function setProcessesOptions($processesOptions)
+    {
+        if (is_null($processesOptions) || is_array($processesOptions)) {
+            $processesOptions = new Options($processesOptions);
+        }
+
+        if (!$processesOptions instanceof Options) {
+            throw new MobillogixJobsException("Options must be array or instance of Options");
+        }
+
+        $this->processesOptions = $processesOptions;
         return $this;
     }
 

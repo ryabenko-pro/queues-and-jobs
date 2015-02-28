@@ -10,6 +10,7 @@ use Mobillogix\Launchpad\JobsBundle\Entity\JobType;
 use Mobillogix\Launchpad\JobsBundle\Service\Persistence\JobProcessPersistenceService;
 use Mobillogix\Launchpad\JobsBundle\Tests\BaseJobsTestCase;
 use Mobillogix\Launchpad\JobsBundle\Tests\Stub\StubProcess;
+use Mobillogix\Launchpad\JobsBundle\Util\Options;
 
 class JobProcessPersistenceServiceTest extends BaseJobsTestCase
 {
@@ -74,7 +75,7 @@ class JobProcessPersistenceServiceTest extends BaseJobsTestCase
         $service = new JobProcessPersistenceService($em, $config);
 
         // WHEN
-        $actual = $service->getProcessesForRun();
+        $service->getProcessesForRun();
     }
 
     public function testShouldGetProcessesToRun()
@@ -86,8 +87,8 @@ class JobProcessPersistenceServiceTest extends BaseJobsTestCase
         $entity = $this->getJobEntity($types[0], []);
 
         $packages = [];
-        $packages[] = $this->createJobPackage($entity, [1, 2, 3, 4]);
-        $packages[] = $this->createJobPackage($entity, [5, 6, 7, 8]);
+        $packages[] = $this->createJobPackage($entity, [1, 2, 3, 4], ["array"]);
+        $packages[] = $this->createJobPackage($entity, [5, 6, 7, 8], null);
 
         $packageRepository = $this->getPackageRepositoryMock('getPackagesForRun');
         $em = $this->getEntityManagerMock([
@@ -106,7 +107,7 @@ class JobProcessPersistenceServiceTest extends BaseJobsTestCase
 
         // WHEN
         $expected = [];
-        $process = new StubProcess([1, 2, 3, 4]);
+        $process = new StubProcess([1, 2, 3, 4], new Options(["array"]));
         $process->setEntity($packages[0]);
         $expected[] = $process;
         $process = new StubProcess([5, 6, 7, 8]);
@@ -231,10 +232,11 @@ class JobProcessPersistenceServiceTest extends BaseJobsTestCase
      * @param array $packages
      * @return JobPackage
      */
-    private function createJobPackage($job, $packages)
+    private function createJobPackage($job, $packages, $options = null)
     {
         $package = new JobPackage();
         $package->setJob($job)
+            ->setOptions($options)
             ->setPackages($packages);
 
         return $package;

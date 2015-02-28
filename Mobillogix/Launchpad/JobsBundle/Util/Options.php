@@ -10,7 +10,7 @@ class Options
 
     function __construct($params = [])
     {
-        $this->params = $params;
+        $this->params = (array)$params;
     }
 
     /**

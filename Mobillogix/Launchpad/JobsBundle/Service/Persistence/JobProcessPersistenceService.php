@@ -9,6 +9,7 @@ use Mobillogix\Launchpad\JobsBundle\Model\BaseProcess;
 use Mobillogix\Launchpad\JobsBundle\Repository\JobEventRepository;
 use Mobillogix\Launchpad\JobsBundle\Repository\JobPackageRepository;
 use Doctrine\ORM\EntityManager;
+use Mobillogix\Launchpad\JobsBundle\Util\Options;
 
 class JobProcessPersistenceService
 {
@@ -155,7 +156,7 @@ class JobProcessPersistenceService
         }
 
         /** @var BaseProcess $process */
-        $process = new $class($package->getPackages());
+        $process = new $class($package->getPackages(), new Options($package->getOptions()));
         $process->setEntity($package);
         return $process;
     }

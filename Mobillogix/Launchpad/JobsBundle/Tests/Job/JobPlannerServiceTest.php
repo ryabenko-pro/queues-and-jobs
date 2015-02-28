@@ -11,6 +11,7 @@ use Mobillogix\Launchpad\JobsBundle\Model\BaseJob;
 use Mobillogix\Launchpad\JobsBundle\Service\JobPlannerService;
 use Mobillogix\Launchpad\JobsBundle\Tests\BaseJobsTestCase;
 use Mobillogix\Launchpad\JobsBundle\Tests\Stub\StubJob;
+use Mobillogix\Launchpad\JobsBundle\Util\Options;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,18 +28,22 @@ class JobPlannerServiceTest extends BaseJobsTestCase
         $entity->setPackagesTotal(2);
 
         $job = new StubJob([]);
+        $processesOptions = ['options'];
         $job->setType('test')
             ->setProcesses([1, 2, 3, 4, 5, 6, 7, 8, 9, 0])
+            ->setProcessesOptions($processesOptions)
             ->setEntity($entity);
 
         $package = new JobPackage();
         $package->setJob($entity)
+            ->setOptions(new Options($processesOptions))
             ->setPackages([1, 2, 3, 4, 5, 6]);
         $jobProcessPersist->expects($this->at(0))->method('savePackage')
             ->with($this->equalTo($package));
 
         $package = new JobPackage();
         $package->setJob($entity)
+            ->setOptions(new Options($processesOptions))
             ->setPackages([7, 8, 9, 0]);
         $jobProcessPersist->expects($this->at(1))->method('savePackage')
             ->with($this->equalTo($package));

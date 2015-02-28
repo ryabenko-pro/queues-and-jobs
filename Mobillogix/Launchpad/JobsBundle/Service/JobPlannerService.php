@@ -78,6 +78,7 @@ class JobPlannerService
         foreach ($packages as $data) {
             $package = new JobPackage();
             $package->setJob($job->getEntity())
+                ->setOptions($job->getProcessesOptions()->getAll())
                 ->setPackages($data);
 
             $this->processPersistence->savePackage($package);

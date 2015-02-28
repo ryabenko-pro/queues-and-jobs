@@ -41,6 +41,11 @@ class JobPackage
     /**
      * @ORM\Column(type="json_array")
      */
+    protected $options;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
     protected $packages;
 
     /**
@@ -107,6 +112,24 @@ class JobPackage
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param mixed $options
+     * @return self
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
     }
 
     /**

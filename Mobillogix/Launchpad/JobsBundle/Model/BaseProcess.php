@@ -5,19 +5,28 @@ namespace Mobillogix\Launchpad\JobsBundle\Model;
 
 use Mobillogix\Launchpad\JobsBundle\Entity\JobPackage;
 use Mobillogix\Launchpad\JobsBundle\Interfaces\ProcessExecutorInterface;
+use Mobillogix\Launchpad\JobsBundle\Util\Options;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class BaseProcess
 {
 
-    protected $packages;
+    /** @var array */
+    private $packages;
+    /** @var Options */
+    private $options;
 
     /** @var JobPackage */
     protected $entity;
 
-    final public function __construct($packages)
+    /**
+     * @param $packages
+     * @param Options $options
+     */
+    final public function __construct($packages, Options $options = null)
     {
         $this->packages = $packages;
+        $this->options = is_null($options) ? new Options() : $options;
     }
 
     /**
@@ -65,6 +74,14 @@ abstract class BaseProcess
                 );
             }
         }
+    }
+
+    /**
+     * @return Options
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     protected function beforeExecute(ContainerInterface $container)
