@@ -83,6 +83,10 @@ abstract class BaseJob
      */
     public function getProcessesOptions()
     {
+        if (is_null($this->processesOptions)) {
+            $this->processesOptions = new Options();
+        }
+
         return $this->processesOptions;
     }
 

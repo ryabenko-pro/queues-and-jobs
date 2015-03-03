@@ -36,14 +36,14 @@ class JobPlannerServiceTest extends BaseJobsTestCase
 
         $package = new JobPackage();
         $package->setJob($entity)
-            ->setOptions(new Options($processesOptions))
+            ->setOptions($processesOptions)
             ->setPackages([1, 2, 3, 4, 5, 6]);
         $jobProcessPersist->expects($this->at(0))->method('savePackage')
             ->with($this->equalTo($package));
 
         $package = new JobPackage();
         $package->setJob($entity)
-            ->setOptions(new Options($processesOptions))
+            ->setOptions($processesOptions)
             ->setPackages([7, 8, 9, 0]);
         $jobProcessPersist->expects($this->at(1))->method('savePackage')
             ->with($this->equalTo($package));

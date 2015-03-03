@@ -43,7 +43,7 @@ class ProcessTest extends BaseJobsTestCase
 
         $executor->expects($this->any())->method('updatePackageNumber');
         $executor->expects($this->any())->method('addError')
-            ->with($process, 2, "Error while executing task: 'Some message.'");
+            ->with($process, 2, "Exception [Mobillogix\Launchpad\JobsBundle\Exception\MobillogixJobsException] while executing task with message: 'Some message.'");
 
         $container = new Container();
         $process->execute($executor, $container);
