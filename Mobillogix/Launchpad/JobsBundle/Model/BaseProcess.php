@@ -70,7 +70,10 @@ abstract class BaseProcess
 
                 $executor->addError($this,
                     $counter,
-                    sprintf("Error while executing task: '%s'", $exception->getMessage())
+                    sprintf("Exception [%s] while executing task with message: '%s'",
+                        get_class($exception),
+                        $exception->getMessage()
+                    )
                 );
             }
         }
