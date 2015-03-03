@@ -39,7 +39,7 @@ class JobPackage
     protected $status = self::STATUS_NEW;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json_array", nullable=true)
      */
     protected $options;
 
