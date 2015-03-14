@@ -1,8 +1,8 @@
-{% extends base_template %}
+{% extends '@MobillogixLaunchpadJobs/Jobs/common.html.twig' %}
 
 {% block page_title %}Jobs details{% endblock %}
 
-{% block page_content %}
+{% block inner_page_content %}
     <h1>Job of type '{{ job.jobType.name }}'</h1>
 
     <div class="col-lg-4">

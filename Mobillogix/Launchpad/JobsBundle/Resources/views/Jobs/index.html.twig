@@ -1,8 +1,8 @@
-{% extends base_template %}
+{% extends '@MobillogixLaunchpadJobs/Jobs/common.html.twig' %}
 
 {% block page_title %}Jobs list{% endblock %}
 
-{% block page_content %}
+{% block inner_page_content %}
     <h1>Jobs list</h1>
 
     Types filter:
@@ -21,7 +21,12 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <td colspan="5" class="pagerfanta">{{ pagerfanta(jobs) }}</td>
+                <td colspan="4">Server time: <strong>{{ "now"|date }}</strong></td>
+                <td colspan="1" class="pagerfanta">
+                    <div class="pull-right">
+                        {{ pagerfanta(jobs) }}
+                    </div>
+                </td>
             </tr>
             <tr>
                 <th>ID</th>
@@ -56,7 +61,12 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4" class="pagerfanta">{{ pagerfanta(jobs) }}</td>
+                <td colspan="4">Server time: <strong>{{ "now"|date }}</strong></td>
+                <td colspan="1" class="pagerfanta">
+                    <div class="pull-right">
+                        {{ pagerfanta(jobs) }}
+                    </div>
+                </td>
             </tr>
         </tfoot>
     </table>

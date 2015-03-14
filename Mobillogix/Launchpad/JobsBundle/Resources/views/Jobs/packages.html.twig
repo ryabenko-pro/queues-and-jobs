@@ -4,7 +4,10 @@
     <table class="table">
         <thead>
             <tr>
-                <td colspan="6" class="pagerfanta">{{ pagerfanta(packages) }}</td>
+                <td colspan="4">Server time: <strong>{{ "now"|date }}</strong></td>
+                <td colspan="1" class="pagerfanta">
+                    {{ pagerfanta(packages) }}
+                </td>
             </tr>
             <tr>
                 <th>ID</th>
@@ -35,7 +38,10 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="6" class="pagerfanta">{{ pagerfanta(packages) }}</td>
+                <td colspan="4">Server time: <strong>{{ "now"|date }}</strong></td>
+                <td colspan="1" class="pagerfanta">
+                    {{ pagerfanta(packages) }}
+                </td>
             </tr>
         </tfoot>
     </table>

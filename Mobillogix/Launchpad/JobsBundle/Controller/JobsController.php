@@ -134,9 +134,27 @@ class JobsController extends Controller
         $types = $this->get('mobillogix.catalogue.repository.job_type')->findAll();
 
         $response['types'] = $types;
+        $response['processes'] = $this->getRunningJobs();
         $response['base_template'] = $this->container->getParameter('mobillogix_jobs.base_template');
 
         return $response;
+    }
+
+    private function getRunningJobs()
+    {
+        $c = $this->container;
+
+        $execGrep = $c->getParameter('cmd_grep');
+        $execPs = $c->getParameter('cmd_ps');
+        $execAwk = $c->getParameter('cmd_awk');
+        $env = $c->getParameter('kernel.environment');
+
+        $processes = [];
+        $rootDir = realpath($c->getParameter('kernel.root_dir') . "/../");
+        $cmd = "{$execPs} aux | {$execGrep} {$env} | {$execGrep} {$rootDir} | {$execGrep} \:job | {$execGrep} -v \"/bin/sh\" |  {$execAwk} '{print $13}'";
+        exec($cmd, $processes);
+
+        return $processes;
     }
 
 }

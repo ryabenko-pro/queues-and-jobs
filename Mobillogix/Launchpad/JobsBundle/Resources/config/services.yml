@@ -1,5 +1,9 @@
-services:
+parameters:
+  cmd_grep: /bin/grep
+  cmd_ps: /bin/ps
+  cmd_awk: /usr/bin/awk
 
+services:
   mobillogix.catalogue.jobs_repository_factory:
     public: false
     class: Mobillogix\Launchpad\Common\Factory\RepositoryFactory

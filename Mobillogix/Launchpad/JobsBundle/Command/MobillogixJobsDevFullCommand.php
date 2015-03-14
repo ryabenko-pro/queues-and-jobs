@@ -20,7 +20,6 @@ class MobillogixJobsDevFullCommand extends BaseSingleCommand
 
 
     protected function configure()
-
     {
         $this->setName("mobillogix:jobs:dev-full")
             ->setDescription("Plan, execute, finish, repeat. For development purposes only!");
