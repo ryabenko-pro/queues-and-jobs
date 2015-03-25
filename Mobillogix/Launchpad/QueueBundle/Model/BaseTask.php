@@ -31,9 +31,10 @@ abstract class BaseTask
 
     /**
      * @param string|null $param Param name to return
+     * @param mixed $default Default for param
      * @return mixed
      */
-    public function getData($param = null)
+    public function getData($param = null, $default = null)
     {
         if (is_null($param)) {
             return $this->data;
@@ -43,7 +44,7 @@ abstract class BaseTask
             return $this->data[$param];
         }
 
-        return null;
+        return $default;
     }
 
     /**
