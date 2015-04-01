@@ -25,6 +25,8 @@ class QueueController extends Controller
 
         $qb = $this->get('mobillogix_launchpad.queue.repository.queued_task')->createQueryBuilder("qt");
 
+        $qb->orderBy("qt.createdAt", "DESC");
+
         $type = $request->get('type');
         if ($type) {
             $qb->andWhere("qt.type = :type")
@@ -35,11 +37,33 @@ class QueueController extends Controller
         $pager->setCurrentPage(max(1, (integer) $request->query->get('page', 1)));
         $pager->setMaxPerPage(max(5, min(50, (integer) $request->query->get('per_page', 20))));
 
+        $processes = $this->getRunningQueues();
+
         return [
             'base_template' => $this->container->getParameter('mobillogix_launchpad.queue.base_template'),
             'types' => $types,
             'type_filter'  => $type,
             'tasks'  => $pager,
+            'processes' => $processes,
         ];
     }
+
+    private function getRunningQueues()
+    {
+        $c = $this->container;
+
+        $execGrep = $c->getParameter('cmd_grep');
+        $execPs = $c->getParameter('cmd_ps');
+        $execAwk = $c->getParameter('cmd_awk');
+        $env = $c->getParameter('kernel.environment');
+
+        $processes = [];
+        $rootDir = realpath($c->getParameter('kernel.root_dir') . "/../");
+        $cmd = "{$execPs} aux | {$execGrep} {$env} | {$execGrep} {$rootDir} | {$execGrep} \\:queue | {$execGrep} -v \"/bin/sh\" |  {$execAwk} '{print $13}'";
+
+        exec($cmd, $processes);
+
+        return $processes;
+    }
+
 }
