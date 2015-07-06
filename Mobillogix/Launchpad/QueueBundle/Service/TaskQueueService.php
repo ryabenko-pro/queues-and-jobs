@@ -43,8 +43,12 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
      * Enqueue task to execute is later in background
      * @inheritdoc
      */
-    public function addTask(BaseTask $task)
+    public function addTask(BaseTask $task, BaseTask $parent = null)
     {
+        if (!is_null($parent) && is_null($parent->getEntity())) {
+            $this->addTask($parent);
+        }
+
         $task->beforeAdd($this->container, $this);
 
         $typeName = $task->getType();
@@ -54,6 +58,12 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         $entity->setPriority($type->getPriority())
             ->setType($typeName)
             ->setData($task->getData());
+
+        $task->setEntity($entity);
+
+        if (!is_null($parent)) {
+            $entity->setParent($parent->getEntity()->getId());
+        }
 
         return $this->queuedTaskRepository->saveQueuedTask($entity);
     }
@@ -87,6 +97,8 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         $entity->setFinishedAt(new \DateTime());
 
         $this->queuedTaskRepository->saveQueuedTask($entity);
+
+        $this->queuedTaskRepository->updateDependTasks($entity);
     }
 
     /**

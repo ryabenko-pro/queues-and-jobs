@@ -34,7 +34,7 @@ class TaskSimpleExecutorService implements TaskExecutorInterface, TaskLoggerInte
     /**
      * @inheritdoc
      */
-    public function addTask(BaseTask $task)
+    public function addTask(BaseTask $task, BaseTask $parent = null)
     {
         $task->beforeAdd($this->container, $this);
         $task->execute($this->container, $this);
