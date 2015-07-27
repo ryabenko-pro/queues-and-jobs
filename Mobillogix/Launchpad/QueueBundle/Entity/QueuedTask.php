@@ -18,7 +18,7 @@ class QueuedTask
     const STATE_RUN = 'run';
     const STATE_DONE = 'done';
     const STATE_FAIL = 'fail';
-    const STATE_DEPEND = 'depend';
+    const STATE_DEPEND = 'dep';
 
     const PRIORITY_MEDIUM = 5;
     const PRIORITY_HIGH = 0;
