@@ -49,7 +49,7 @@ class QueuedTask
     protected $state = self::STATE_NEW;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json_array", nullable=true)
      */
     protected $data;
 
