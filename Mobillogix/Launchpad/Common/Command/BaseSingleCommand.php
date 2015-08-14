@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 abstract class BaseSingleCommand extends ContainerAwareCommand
 {
@@ -112,7 +113,12 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
             $pidDir = $container->getParameter('kernel.cache_dir');
         }
 
-        $pidFilename = $pidDir . "/" . sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id"));
+        // Win OS
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $pidFilename = $pidDir . "/" . str_replace(":", "-", sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id")));
+        } else {
+            $pidFilename = $pidDir . "/" . sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id"));
+        }
 
         return $pidFilename;
     }
@@ -165,5 +171,24 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      * @return mixed
      */
     abstract public function doExecute(InputInterface $input, OutputInterface $output);
+
+    /**
+     * Run existing command using Symfony's Process component.
+     * @param string $command
+     * @param array $args Command line arguments and options list
+     */
+    protected function runAsProcess($command, $args = [])
+    {
+        $container = $this->getContainer();
+
+        $args = array_merge([
+            sprintf('%s=%s', '--env', $container->get('kernel')->getEnvironment()),
+        ], $args);
+
+        $args = join(' ', $args);
+
+        $process = new Process(sprintf('php bin/console %s %s', $command, $args), null, null, null, null);
+        $process->run();
+    }
 
 }
