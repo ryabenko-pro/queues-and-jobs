@@ -10,10 +10,12 @@ interface TaskExecutorInterface
 {
 
     /**
-     * Executes task
+     * Executes task. If $parent is present, do not execute $task until parent not finished
      *
      * @param BaseTask $task
+     * @param BaseTask $parent
+     * @return
      */
-    public function addTask(BaseTask $task);
+    public function addTask(BaseTask $task, BaseTask $parent = null);
 
 }

@@ -13,12 +13,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class QueuedTask
 {
-
     const STATE_NEW = 'new';
     const STATE_SELECTED = 'sel';
     const STATE_RUN = 'run';
     const STATE_DONE = 'done';
     const STATE_FAIL = 'fail';
+    const STATE_DEPEND = 'dep';
 
     const PRIORITY_MEDIUM = 5;
     const PRIORITY_HIGH = 0;
@@ -30,7 +30,6 @@ class QueuedTask
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
 
     /**
      * TODO: make reference to QueuedTaskType
@@ -50,7 +49,7 @@ class QueuedTask
     protected $state = self::STATE_NEW;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json_array", nullable=true)
      */
     protected $data;
 
@@ -85,6 +84,12 @@ class QueuedTask
     protected $finishedAt;
 
     /**
+     * @var integer
+     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     */
+    protected $parent;
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
@@ -109,12 +114,13 @@ class QueuedTask
     }
 
     /**
-     * @param mixed $type
+     * @param  mixed $type
      * @return self
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -127,12 +133,13 @@ class QueuedTask
     }
 
     /**
-     * @param int $priority
+     * @param  int  $priority
      * @return self
      */
     public function setPriority($priority)
     {
         $this->priority = $priority;
+
         return $this;
     }
 
@@ -145,12 +152,13 @@ class QueuedTask
     }
 
     /**
-     * @param string $state
+     * @param  string $state
      * @return self
      */
     public function setState($state)
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -163,12 +171,13 @@ class QueuedTask
     }
 
     /**
-     * @param mixed $data
+     * @param  mixed $data
      * @return self
      */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -181,12 +190,13 @@ class QueuedTask
     }
 
     /**
-     * @param mixed $log
+     * @param  mixed $log
      * @return self
      */
     public function setLog($log)
     {
         $this->log = $log;
+
         return $this;
     }
 
@@ -199,12 +209,13 @@ class QueuedTask
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return self
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -217,12 +228,13 @@ class QueuedTask
     }
 
     /**
-     * @param \DateTime $startedAt
+     * @param  \DateTime $startedAt
      * @return self
      */
     public function setStartedAt($startedAt)
     {
         $this->startedAt = $startedAt;
+
         return $this;
     }
 
@@ -235,12 +247,13 @@ class QueuedTask
     }
 
     /**
-     * @param \DateTime $selectedAt
+     * @param  \DateTime $selectedAt
      * @return self
      */
     public function setSelectedAt($selectedAt)
     {
         $this->selectedAt = $selectedAt;
+
         return $this;
     }
 
@@ -253,12 +266,13 @@ class QueuedTask
     }
 
     /**
-     * @param \DateTime $finishedAt
+     * @param  \DateTime $finishedAt
      * @return self
      */
     public function setFinishedAt($finishedAt)
     {
         $this->finishedAt = $finishedAt;
+
         return $this;
     }
 
@@ -267,4 +281,19 @@ class QueuedTask
         $this->log .= sprintf("[%s]: %s\n---\n", $type, $message);
     }
 
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        $this->setStateDepend();
+    }
+
+    public function setStateDepend()
+    {
+        $this->setState(self::STATE_DEPEND);
+    }
 }

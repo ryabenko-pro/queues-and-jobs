@@ -7,6 +7,7 @@ namespace Mobillogix\Launchpad\QueueBundle\Repository;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityRepository;
 use Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask;
+use PDO;
 
 class QueuedTaskRepository extends EntityRepository
 {
@@ -145,4 +146,34 @@ class QueuedTaskRepository extends EntityRepository
         return $qb->getQuery()->execute();
     }
 
+    /**
+     * @param QueuedTask $entity
+     */
+    public function updateDependTasks(QueuedTask $entity)
+    {
+        $em = $this->getEntityManager();
+
+        $q = "SELECT qt.id FROM queued_task qt WHERE qt.state = :state AND qt.parent_id = :parent
+              FOR UPDATE";
+
+        $em->beginTransaction();
+
+        $st = $em->getConnection()->prepare($q);
+        $st->bindValue('state', QueuedTask::STATE_DEPEND);
+        $st->bindValue('parent', $entity->getId());
+        $st->execute();
+
+        $ids = $st->fetchAll(PDO::FETCH_COLUMN);
+
+        $this->createQueryBuilder('qt')
+            ->update()
+            ->set('qt.state', ':new')
+            ->where('qt.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->setParameter('new', QueuedTask::STATE_NEW)
+            ->setParameter('ids', $ids)
+            ->getQuery()->execute();
+
+        $em->commit();
+    }
 }

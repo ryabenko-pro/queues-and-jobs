@@ -18,10 +18,10 @@ abstract class BaseTask
     protected $entity;
 
     /**
-     * @param null $data
+     * @param array $data
      * @param QueuedTask $entity
      */
-    final public function __construct($data = null, QueuedTask $entity = null)
+    final public function __construct($data = [], QueuedTask $entity = null)
     {
         $this->validateData($data);
 
