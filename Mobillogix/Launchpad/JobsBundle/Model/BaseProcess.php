@@ -77,6 +77,8 @@ abstract class BaseProcess
                 );
             }
         }
+
+        $this->afterExecute($container);
     }
 
     /**
@@ -88,6 +90,11 @@ abstract class BaseProcess
     }
 
     protected function beforeExecute(ContainerInterface $container)
+    {
+
+    }
+
+    protected function afterExecute(ContainerInterface $container)
     {
 
     }
