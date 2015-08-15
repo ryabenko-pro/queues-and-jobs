@@ -22,7 +22,7 @@ class MobillogixJobsPackageRunCommand extends ContainerAwareCommand
         $this->setName("mobillogix:jobs:package-run")
             ->setDescription("Execute single package in 'STATUS_SELECTED' state only.");
         $this->addArgument('id', InputArgument::REQUIRED, "Package id to run");
-        $this->addOption('force', 'f', InputOption::VALUE_OPTIONAL, "Force executing package in any state", false);
+        $this->addOption('force', 'f', InputOption::VALUE_NONE, "Force executing package in any state");
     }
 
 
@@ -38,8 +38,8 @@ class MobillogixJobsPackageRunCommand extends ContainerAwareCommand
         $id = $input->getArgument("id");
         $process = $service->getProcess($id);
 
-        if ($process->getEntity()->getStatus() !== JobPackage::STATUS_SELECTED && !$input->hasOption("force")) {
-            throw new MobillogixJobsException(sprintf("Package status '%s' not allowed for execution (must be 'STATUS_SELECTED').", $process->getEntity()->getStatus()));
+        if ($process->getEntity()->getStatus() !== JobPackage::STATUS_SELECTED && !$input->getOption("force")) {
+            throw new MobillogixJobsException(sprintf("Package status '%s' not allowed for execution (must be '" . JobPackage::STATUS_SELECTED . "').", $process->getEntity()->getStatus()));
         }
 
         $slug = $process->getEntity()->getJob()->getJobType()->getSlug();
