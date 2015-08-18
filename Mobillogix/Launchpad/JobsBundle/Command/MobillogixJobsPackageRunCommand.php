@@ -30,6 +30,7 @@ class MobillogixJobsPackageRunCommand extends ContainerAwareCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return mixed
+     * @throws MobillogixJobsException
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
