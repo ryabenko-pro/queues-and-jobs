@@ -40,11 +40,12 @@ class MobillogixJobsDevFullCommand extends BaseSingleCommand
      */
     public function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->planner->runPlanning();
-        $this->executor->executeProcesses();
-        $this->planner->runFinishing($this->getContainer());
+        // Running as Symfony's Process component because entities do not get cleared properly in a single process.
+        // TODO: running processes is slower
+        $this->runAsProcess('mobillogix:jobs:plan');
+        $this->runAsProcess('mobillogix:jobs:execute');
+        $this->runAsProcess('mobillogix:jobs:finish');
 
         $output->write("\r" . $this->symbols[$this->cycles % count($this->symbols)]);
     }
-
 }

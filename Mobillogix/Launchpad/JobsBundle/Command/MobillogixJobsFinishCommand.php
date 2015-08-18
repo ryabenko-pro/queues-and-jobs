@@ -30,7 +30,7 @@ class MobillogixJobsFinishCommand extends BaseSingleCommand
      */
     public function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->service->runFinishing($this->getContainer());
+        $this->service->runFinishing();
     }
 
 }
