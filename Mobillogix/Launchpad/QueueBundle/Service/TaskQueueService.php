@@ -98,7 +98,7 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
 
         $this->queuedTaskRepository->saveQueuedTask($entity);
 
-        if ($entity::STATE_DONE == $entity) {
+        if ($entity->isDone()) {
             $this->queuedTaskRepository->updateDependTasks($entity);
         }
     }

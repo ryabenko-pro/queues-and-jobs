@@ -296,4 +296,12 @@ class QueuedTask
     {
         $this->setState(self::STATE_DEPEND);
     }
+
+    /**
+     * @return bool
+     */
+    public function isDone()
+    {
+        return self::STATE_DONE == $this->state;
+    }
 }
