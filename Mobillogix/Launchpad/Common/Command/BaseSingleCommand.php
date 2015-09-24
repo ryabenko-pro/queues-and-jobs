@@ -43,6 +43,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
+     * @throws \Exception
      */
     final public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -129,7 +130,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      */
     private function isAlive($pid)
     {
-        return file_exists("/proc/{$pid}");
+        return trim($pid) && file_exists("/proc/{$pid}");
     }
 
     /**
