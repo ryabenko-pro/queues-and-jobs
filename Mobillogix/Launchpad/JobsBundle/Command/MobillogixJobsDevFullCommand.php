@@ -25,7 +25,10 @@ class MobillogixJobsDevFullCommand extends BaseSingleCommand
             ->setDescription("Plan, execute, finish, repeat. For development purposes only!");
     }
 
-    protected function beforeStart()
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeStart(InputInterface $input, OutputInterface $output)
     {
         $this->planner = $this->getContainer()->get('job_planner.service');
         $this->executor = $this->getContainer()->get('process_executor.service');

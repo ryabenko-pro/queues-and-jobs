@@ -19,7 +19,10 @@ class MobillogixJobsPlanCommand extends BaseSingleCommand
             ->setDescription("Run jobs planning to create packages");
     }
 
-    protected function beforeStart()
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeStart(InputInterface $input, OutputInterface $output)
     {
         $this->service = $this->getContainer()->get('job_planner.service');
     }

@@ -6,13 +6,14 @@ namespace Mobillogix\Launchpad\QueueBundle\Tests\Service;
 
 use Mobillogix\Launchpad\QueueBundle\DependencyInjection\Util\ConfigQueuedTaskType;
 use Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask;
-use Mobillogix\Launchpad\QueueBundle\Entity\QueuedTaskRepository;
 use Mobillogix\Launchpad\QueueBundle\Exception\TaskExecutionException;
+use Mobillogix\Launchpad\QueueBundle\Repository\QueuedTaskRepository;
 use Mobillogix\Launchpad\QueueBundle\Service\TaskLoggerInterface;
 use Mobillogix\Launchpad\QueueBundle\Service\TaskQueueService;
 use Mobillogix\Launchpad\QueueBundle\Tests\StubQueuedTask;
 use Mobillogix\Launchpad\QueueBundle\Tests\StubTask;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TaskQueueServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +30,7 @@ class TaskQueueServiceTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         /** @var QueuedTaskRepository|\PHPUnit_Framework_MockObject_MockObject $repository */
         $repository = $this->getMockBuilder('Mobillogix\Launchpad\QueueBundle\Entity\QueuedTaskRepository')
-            ->setMethods(['saveQueueTask', 'getQueuedTask', 'getQueuedTasksForRun'])
+            ->setMethods(['saveQueueTask', 'getQueuedTask', 'getQueuedTasksForRun', 'updateDependTasks'])
             ->disableOriginalConstructor()->getMock();
 
         $service = new TaskQueueService($container, $repository, []);
@@ -86,6 +87,8 @@ class TaskQueueServiceTest extends \PHPUnit_Framework_TestCase
 
         $task->expects($this->once())->method('execute')
             ->willReturnCallback(function($container, TaskLoggerInterface $logger) use ($task) {
+                $this->assertInstanceOf(ContainerInterface::class, $container);
+
                 $logger->log($task, "Some log message");
 
                 echo "Some raw output";
@@ -93,6 +96,9 @@ class TaskQueueServiceTest extends \PHPUnit_Framework_TestCase
 
         $repository->expects($this->once())
             ->method('setTaskStarted')->with($entity);
+
+        $repository->expects($this->once())
+            ->method('updateDependTasks')->with($entity);
 
         $expectedEntity = clone $entity;
         $expectedEntity->setState($entity::STATE_DONE)
@@ -217,7 +223,7 @@ class TaskQueueServiceTest extends \PHPUnit_Framework_TestCase
     private function getQueuedTypesRepositoryMock()
     {
         $repository = $this->getMockBuilder('Mobillogix\Launchpad\QueueBundle\Entity\QueuedTaskRepository')
-            ->setMethods(['saveQueuedTask', 'setTaskStarted', 'setTaskFinished', 'getQueuedTasksForRun'])
+            ->setMethods(['saveQueuedTask', 'setTaskStarted', 'setTaskFinished', 'getQueuedTasksForRun', 'updateDependTasks'])
             ->disableOriginalConstructor()->getMock();
         return $repository;
     }

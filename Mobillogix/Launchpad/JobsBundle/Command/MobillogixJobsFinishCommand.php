@@ -18,7 +18,10 @@ class MobillogixJobsFinishCommand extends BaseSingleCommand
         $this->setName("mobillogix:jobs:finish");
     }
 
-    protected function beforeStart()
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeStart(InputInterface $input, OutputInterface $output)
     {
         $this->service = $this->getContainer()->get('job_planner.service');
     }

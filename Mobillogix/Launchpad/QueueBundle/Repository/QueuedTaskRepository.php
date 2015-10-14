@@ -12,7 +12,8 @@ use PDO;
 class QueuedTaskRepository extends EntityRepository
 {
 
-    const RUN_TASKS_LIMIT = 30;
+    // Select tasks one by one
+    const RUN_TASKS_LIMIT = 1;
 
     /**
      * @param QueuedTask $entity
@@ -46,20 +47,28 @@ class QueuedTaskRepository extends EntityRepository
     }
 
     /**
+     * @param string[]|null $types If set - select only tasks on this types
      * @param int $limit
-     * @return QueuedTask[]
+     * @return \Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask[]
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function getQueuedTasksForRun($limit = self::RUN_TASKS_LIMIT)
+    public function getQueuedTasksForRun($types = null, $limit = self::RUN_TASKS_LIMIT)
     {
         $em = $this->getEntityManager();
 
         $qb = $this->createQueryBuilder('qt');
 
-        $q = $qb->where('qt.state = :new')
+        $qb->where('qt.state = :new')
             ->setParameter('new', QueuedTask::STATE_NEW)
             ->setMaxResults($limit)
-            ->orderBy('qt.createdAt')
-            ->getQuery();
+            ->orderBy('qt.createdAt');
+
+        if (!is_null($types) && !empty($types)) {
+            $qb->andWhere('qt.type IN (:types)')
+                ->setParameter('types', (array)$types);
+        }
+
+        $q = $qb->getQuery();
 
 
         $em->beginTransaction();

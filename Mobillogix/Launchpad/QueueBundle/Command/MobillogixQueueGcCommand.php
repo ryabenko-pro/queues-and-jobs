@@ -19,7 +19,10 @@ class MobillogixQueueGcCommand extends BaseSingleCommand
         $this->setDescription("Garbage collector for tasks. Rules are:\n - 'selected' for some time.\n - started and not finished for some time.");
     }
 
-    protected function beforeStart()
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeStart(InputInterface $input, OutputInterface $output)
     {
         $this->repository = $this->getContainer()->get('mobillogix_launchpad.queue.repository.queued_task');
     }

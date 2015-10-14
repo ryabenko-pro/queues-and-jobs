@@ -122,12 +122,12 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         return $task;
     }
 
-    public function runTasks()
+    public function runTasks($types = null)
     {
         /** @var BaseTask[] $tasks */
         $tasks = [];
 
-        $entities = $this->queuedTaskRepository->getQueuedTasksForRun();
+        $entities = $this->queuedTaskRepository->getQueuedTasksForRun($types);
         foreach ($entities as $entity) {
             $tasks[] = $this->mapEntityToTask($entity);
         }
@@ -164,6 +164,16 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         return $type;
     }
 
+    /**
+     * Redefine container to be able extend parameters
+     * @param ContainerInterface $container
+     * @return self
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+        return $this;
+    }
 
     /**
      * @inheritdoc

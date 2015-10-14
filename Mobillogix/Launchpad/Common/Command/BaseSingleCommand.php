@@ -31,12 +31,12 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
     {
         parent::__construct($name);
 
-        $this->addOption("single-id", "sid", InputOption::VALUE_OPTIONAL, "Only one task with same name + single-id is allowed.", "")
+        $this->addOption("single-id", null, InputOption::VALUE_OPTIONAL, "Only one task with same name + single-id is allowed.", "")
             ->addOption("permanent", "p", InputOption::VALUE_NONE, "Should this task do cycles. If not present it will be run only once, as usual command.")
-            ->addOption("pid-dir", "pid", InputOption::VALUE_OPTIONAL, "Directory name to store pid files.", null)
-            ->addOption("cycle-delay", "del", InputOption::VALUE_OPTIONAL, "Delay between cycles in seconds.", 1)
-            ->addOption("memory-limit", "mem", InputOption::VALUE_OPTIONAL, "Task will gentle exit when limit reached.")
-            ->addOption("cycles-limit", "cyc", InputOption::VALUE_OPTIONAL, "Task will gentle exit after cycles done.", 10000);
+            ->addOption("pid-dir", null, InputOption::VALUE_OPTIONAL, "Directory name to store pid files.", null)
+            ->addOption("cycle-delay", null, InputOption::VALUE_OPTIONAL, "Delay between cycles in seconds.", 1)
+            ->addOption("memory-limit", null, InputOption::VALUE_OPTIONAL, "Task will gentle exit when limit reached.")
+            ->addOption("cycles-limit", null, InputOption::VALUE_OPTIONAL, "Task will gentle exit after cycles done.", 10000);
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
         $this->cyclesLimit = intval($input->getOption('cycles-limit'));
         $this->cycleDelay = intval($input->getOption('cycle-delay'));
 
-        $this->beforeStart();
+        $this->beforeStart($input, $output);
 
         $lastStartTs = time();
         $this->doExecute($input, $output);
@@ -92,7 +92,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      */
     public function isInstanceRunning()
     {
-        $pidFilename = $this->getPidFilename($this->input);
+        $pidFilename = $this->getPidFilename();
         if (is_readable($pidFilename)) {
             $pid = file_get_contents($pidFilename);
 
@@ -130,6 +130,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      */
     private function isAlive($pid)
     {
+        // TODO: not working on Mac!
         return trim($pid) && file_exists("/proc/{$pid}");
     }
 
@@ -160,8 +161,10 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
 
     /**
      * Do some initialization outside of process's loop
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
-    protected function beforeStart()
+    protected function beforeStart(InputInterface $input, OutputInterface $output)
     {
 
     }

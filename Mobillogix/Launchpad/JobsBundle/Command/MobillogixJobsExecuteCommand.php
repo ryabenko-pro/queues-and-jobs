@@ -19,7 +19,10 @@ class MobillogixJobsExecuteCommand extends BaseSingleCommand
             ->setDescription("Run packages. Can be run in parallel.");
     }
 
-    protected function beforeStart()
+    /**
+     * {@inheritdoc}
+     */
+    protected function beforeStart(InputInterface $input, OutputInterface $output)
     {
         $this->service = $this->getContainer()->get('job_process_persistence.service');
     }
