@@ -15,7 +15,7 @@ class JobProcessPersistenceService
 {
 
     const PARENT_JOB_PROCESS_CLASS = 'Mobillogix\Launchpad\JobsBundle\Model\BaseProcess';
-    const PACKAGES_LIMIT = 100;
+    const PACKAGES_LIMIT = 1;
 
     protected $config;
 

@@ -59,6 +59,9 @@ abstract class BaseJob
 
     final public function runPlanning(ContainerInterface $container)
     {
+        // Now we stop planning by default.
+        $this->stopPlanning();
+
         $this->doPlan($container);
     }
 
@@ -151,6 +154,14 @@ abstract class BaseJob
     }
 
     /**
+     * Call this method to not stop planning after first one
+     */
+    public function doNotStopPlanning()
+    {
+        $this->needsPlanning = true;
+    }
+
+    /**
      * Method is called when before it persist
      * @param ContainerInterface $container
      */
@@ -165,7 +176,9 @@ abstract class BaseJob
     abstract public function getType();
 
     /**
-     * Creating processes for incoming data
+     * Creating processes for incoming data.
+     * By default there is one planning. Call doNotStopPlanning method to keep job planning.
+     *
      * @param ContainerInterface $container
      * @return boolean True if need more planing, false if no more planning needed
      */
