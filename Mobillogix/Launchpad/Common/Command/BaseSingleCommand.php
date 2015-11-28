@@ -128,10 +128,9 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      * @param $pid
      * @return bool
      */
-    private function isAlive($pid)
+    protected function isAlive($pid)
     {
-        // TODO: not working on Mac!
-        return trim($pid) && file_exists("/proc/{$pid}");
+        return trim($pid) && (posix_getpgid($pid) !== false);
     }
 
     /**
