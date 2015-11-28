@@ -38,10 +38,12 @@ class QueuedTaskRepository extends EntityRepository
             ->update()
             ->set('qt.state', ':started')
             ->set('qt.startedAt', ':started_at')
+            ->set('qt.pid', ':pid')
             ->where('qt.id = :id')
             ->setParameters([
                 'started' => $task::STATE_RUN,
                 'started_at'    => new \DateTime(),
+                'pid'    => getmypid(),
                 'id'    => $task->getId(),
             ])->getQuery()->execute();
     }

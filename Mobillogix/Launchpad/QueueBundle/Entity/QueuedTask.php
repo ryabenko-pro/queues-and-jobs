@@ -90,6 +90,12 @@ class QueuedTask
     protected $parent;
 
     /**
+     * @var integer
+     * @ORM\Column(name="pid", type="integer", nullable=true)
+     */
+    protected $pid;
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
@@ -303,5 +309,24 @@ class QueuedTask
     public function isDone()
     {
         return self::STATE_DONE == $this->state;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPid()
+    {
+        return $this->pid;
+    }
+
+    /**
+     * @param  int $pid
+     * @return self
+     */
+    public function setPid($pid)
+    {
+        $this->pid = $pid;
+
+        return $this;
     }
 }
