@@ -75,7 +75,7 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
     public function executeTask(BaseTask $task)
     {
         $entity = $task->getEntity();
-        $this->queuedTaskRepository->setTaskStarted($entity);
+        $this->queuedTaskRepository->setTaskStarted($entity, getmypid());
 
         try {
             ob_start();
