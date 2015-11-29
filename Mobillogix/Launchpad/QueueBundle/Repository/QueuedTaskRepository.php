@@ -31,17 +31,20 @@ class QueuedTaskRepository extends EntityRepository
     /**
      * Mark task as started
      * @param QueuedTask $task
+     * @param int $pid
      */
-    public function setTaskStarted(QueuedTask $task)
+    public function setTaskStarted(QueuedTask $task, $pid)
     {
         $this->createQueryBuilder("qt")
             ->update()
             ->set('qt.state', ':started')
             ->set('qt.startedAt', ':started_at')
+            ->set('qt.pid', ':pid')
             ->where('qt.id = :id')
             ->setParameters([
                 'started' => $task::STATE_RUN,
                 'started_at'    => new \DateTime(),
+                'pid'    => $pid,
                 'id'    => $task->getId(),
             ])->getQuery()->execute();
     }
