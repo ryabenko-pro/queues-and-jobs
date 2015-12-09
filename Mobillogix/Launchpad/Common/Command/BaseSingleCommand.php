@@ -190,7 +190,8 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
 
         $args = join(' ', $args);
 
-        $process = new Process(sprintf('php bin/console %s %s', $command, $args), null, null, null, null);
+        $dir = $this->getContainer()->getParameter('kernel.root_dir') . '/../';
+        $process = new Process(sprintf('php %s/bin/console %s %s', $dir, $command, $args), null, null, null, null);
         $process->run();
     }
 
