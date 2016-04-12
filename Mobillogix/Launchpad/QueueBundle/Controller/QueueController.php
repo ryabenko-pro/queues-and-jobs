@@ -2,6 +2,7 @@
 
 namespace Mobillogix\Launchpad\QueueBundle\Controller;
 
+use Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,6 +46,19 @@ class QueueController extends Controller
             'type_filter'  => $type,
             'tasks'  => $pager,
             'processes' => $processes,
+        ];
+    }
+
+    /**
+     * @Template()
+     * @param QueuedTask $task
+     * @return array
+     */
+    public function getAction(QueuedTask $task)
+    {
+        return [
+            'base_template' => $this->container->getParameter('mobillogix_launchpad.queue.base_template'),
+            'task'  => $task,
         ];
     }
 
