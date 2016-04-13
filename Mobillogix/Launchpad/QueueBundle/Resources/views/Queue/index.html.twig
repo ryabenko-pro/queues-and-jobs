@@ -45,7 +45,9 @@
         <tbody>
         {% for task in tasks %}
             <tr class="task-{{ task.state }}">
-                <td>{{ task.id }}</td>
+                <td>
+                    <a href="{{ path('mobillogix_queue_task_get', {id: task.id}) }}">{{ task.id }}</a>
+                </td>
                 <td>
                     <strong>{{ task.type }}</strong><br>
                     <small>{{ task.createdAt|date }}</small>

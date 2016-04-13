@@ -1,5 +1,11 @@
 mobillogix_queue_task_index:
-    pattern: /queued-tasks
+    path: /queued-tasks
     methods: [GET]
     defaults:
         _controller: MobillogixLaunchpadQueueBundle:Queue:index
+
+mobillogix_queue_task_get:
+    path: /queued-tasks/{id}
+    methods: [GET]
+    defaults:
+        _controller: MobillogixLaunchpadQueueBundle:Queue:get
