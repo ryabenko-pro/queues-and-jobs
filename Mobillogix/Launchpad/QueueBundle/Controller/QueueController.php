@@ -50,6 +50,50 @@ class QueueController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param QueuedTask $task
+     */
+    public function executeAction(Request $request, QueuedTask $task)
+    {
+        $service = $this->container->get('mobillogix_launchpad.queue.task_queue.service_database');
+        $task->dropState();
+        $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
+        $service->executeTask($service->mapEntityToTask($task));
+        $request->getSession()->getFlashBag()->add('alert', 'Task was executed');
+
+        return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
+    }
+
+    /**
+     * @param Request $request
+     * @param QueuedTask $task
+     */
+    public function cancelAction(Request $request, QueuedTask $task)
+    {
+        $task->dropState();
+        $task->setState(QueuedTask::STATE_CANCELLED);
+        $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
+
+        return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
+    }
+
+    /**
+     * @param Request $request
+     * @param QueuedTask $task
+     */
+    public function retryAction(Request $request, QueuedTask $task)
+    {
+        $task->dropState();
+        $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
+
+        $service = $this->container->get('mobillogix_launchpad.queue.task_queue.service_database');
+        $service->addTask($service->mapEntityToTask($task));
+        $request->getSession()->getFlashBag()->add('alert', 'Task was added to queue');
+
+        return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
+    }
+
+    /**
      * @Template()
      * @param QueuedTask $task
      * @return array

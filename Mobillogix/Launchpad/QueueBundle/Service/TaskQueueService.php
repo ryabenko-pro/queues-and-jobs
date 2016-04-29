@@ -75,6 +75,12 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
     public function executeTask(BaseTask $task)
     {
         $entity = $task->getEntity();
+
+        if ($entity->isCancelled()) {
+            $entity->addLog(sprintf('Task is cancelled. It cannot be executed anymore'));
+
+            return;
+        }
         $this->queuedTaskRepository->setTaskStarted($entity, getmypid());
 
         try {
@@ -93,7 +99,6 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
             $log = sprintf("[%s]: %s", get_class($exception), $exception->getMessage());
             $entity->addLog($log, 'error');
         }
-
         $entity->setFinishedAt(new \DateTime());
 
         $this->queuedTaskRepository->saveQueuedTask($entity);
