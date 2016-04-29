@@ -37,6 +37,13 @@ class TaskSimpleExecutorService implements TaskExecutorInterface, TaskLoggerInte
     public function addTask(BaseTask $task, BaseTask $parent = null)
     {
         $task->beforeAdd($this->container, $this);
+        $entity = $task->getEntity();
+
+        if ($entity->isCancelled()) {
+            $entity->addLog(sprintf('Task is cancelled. It cannot be executed anymore'));
+
+            return null;
+        }
         $task->execute($this->container, $this);
 
         return null;

@@ -9,3 +9,21 @@ mobillogix_queue_task_get:
     methods: [GET]
     defaults:
         _controller: MobillogixLaunchpadQueueBundle:Queue:get
+
+mobillogix_queue_task_retry:
+    path: /queued-tasks/{id}/retry
+    methods: [GET]
+    defaults:
+        _controller: MobillogixLaunchpadQueueBundle:Queue:retry
+
+mobillogix_queue_task_cancel:
+    path: /queued-tasks/{id}/cancel
+    methods: [GET]
+    defaults:
+        _controller: MobillogixLaunchpadQueueBundle:Queue:cancel
+
+mobillogix_queue_task_execute:
+    path: /queued-tasks/{id}/execute
+    methods: [GET]
+    defaults:
+        _controller: MobillogixLaunchpadQueueBundle:Queue:execute

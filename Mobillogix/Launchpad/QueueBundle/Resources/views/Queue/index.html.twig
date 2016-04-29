@@ -38,6 +38,9 @@
             <th>ID</th>
             <th>Type</th>
             <th>Status</th>
+            <th>Add to queue</th>
+            <th>Execute</th>
+            <th>Cancel</th>
             <th>Data</th>
             <th>Log</th>
         </tr>
@@ -53,6 +56,19 @@
                     <small>{{ task.createdAt|date }}</small>
                 </td>
                 <td>{{ task.state }}</td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('mobillogix_queue_task_retry', {id: task.id}) }}">Add to queue</a>
+                </td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('mobillogix_queue_task_execute', {id: task.id}) }}">Execute</a>
+                </td>
+                <td>
+                    {% if task.cancelled %}
+                        ----
+                    {% else %}
+                        <a class="btn btn-success" href="{{ path('mobillogix_queue_task_cancel', {id: task.id}) }}">Cancel</a>
+                    {% endif %}
+                </td>
                 <td>
                     <pre>{{ task.data|yaml_encode(2) }}</pre>
                 </td>

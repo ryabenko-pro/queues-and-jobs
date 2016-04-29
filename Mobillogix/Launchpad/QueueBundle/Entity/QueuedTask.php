@@ -19,6 +19,7 @@ class QueuedTask
     const STATE_DONE = 'done';
     const STATE_FAIL = 'fail';
     const STATE_DEPEND = 'dep';
+    const STATE_CANCELLED = 'cancelled';
 
     const PRIORITY_MEDIUM = 5;
     const PRIORITY_HIGH = 0;
@@ -328,5 +329,17 @@ class QueuedTask
         $this->pid = $pid;
 
         return $this;
+    }
+
+    public function isCancelled()
+    {
+        return $this->getState() === self::STATE_CANCELLED;
+    }
+
+    public function dropState()
+    {
+        $this->setState(self::STATE_NEW);
+        $this->setStartedAt(null);
+        $this->setFinishedAt(null);
     }
 }
