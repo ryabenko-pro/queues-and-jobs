@@ -20,6 +20,7 @@ class QueuedTask
     const STATE_FAIL = 'fail';
     const STATE_DEPEND = 'dep';
     const STATE_CANCELLED = 'cancelled';
+    const STATE_WAITING = 'wait';
 
     const PRIORITY_MEDIUM = 5;
     const PRIORITY_HIGH = 0;
@@ -334,6 +335,24 @@ class QueuedTask
     public function isCancelled()
     {
         return $this->getState() === self::STATE_CANCELLED;
+    }
+
+    public function isWaiting()
+    {
+        return $this->getState() === self::STATE_WAITING;
+    }
+
+    public function isRunning()
+    {
+        return $this->getState() === self::STATE_RUN;
+    }
+
+    public function isFinished()
+    {
+        return in_array($this->getState(), array(
+            self::STATE_FAIL,
+            self::STATE_DONE
+        ));
     }
 
     public function dropState()

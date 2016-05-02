@@ -3,6 +3,13 @@
 {% block page_title %}Tasks list{% endblock %}
 
 {% block page_content %}
+    {% for type, messages in app.request.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
     <h1>Tasks list</h1>
 
     {% if processes %}
@@ -38,8 +45,8 @@
             <th>ID</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Add to queue</th>
-            <th>Execute</th>
+            <th>Restart</th>
+            <th>Wait</th>
             <th>Cancel</th>
             <th>Data</th>
             <th>Log</th>
@@ -57,13 +64,21 @@
                 </td>
                 <td>{{ task.state }}</td>
                 <td>
-                    <a class="btn btn-success" href="{{ path('mobillogix_queue_task_retry', {id: task.id}) }}">Add to queue</a>
+                    {% if task.cancelled or task.running %}
+                        ----
+                    {% else %}
+                        <a class="btn btn-success" href="{{ path('mobillogix_queue_task_retry', {id: task.id}) }}">Restart</a>
+                    {% endif %}
                 </td>
                 <td>
-                    <a class="btn btn-success" href="{{ path('mobillogix_queue_task_execute', {id: task.id}) }}">Execute</a>
+                    {% if task.cancelled or task.running or task.waiting %}
+                        ----
+                    {% else %}
+                        <a class="btn btn-success" href="{{ path('mobillogix_queue_task_suspend', {id: task.id}) }}">Wait</a>
+                    {% endif %}
                 </td>
                 <td>
-                    {% if task.cancelled %}
+                    {% if task.cancelled or task.running %}
                         ----
                     {% else %}
                         <a class="btn btn-success" href="{{ path('mobillogix_queue_task_cancel', {id: task.id}) }}">Cancel</a>

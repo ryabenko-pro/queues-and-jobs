@@ -53,13 +53,18 @@ class QueueController extends Controller
      * @param Request $request
      * @param QueuedTask $task
      */
-    public function executeAction(Request $request, QueuedTask $task)
+    public function suspendAction(Request $request, QueuedTask $task)
     {
-        $service = $this->container->get('mobillogix_launchpad.queue.task_queue.service_database');
+        if ($task->isCancelled() || $task->isRunning()) {
+            $request->getSession()->getFlashBag()->add('error', 'Task cannot be set to waiting.');
+
+            return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
+        }
         $task->dropState();
+        $task->setState(QueuedTask::STATE_WAITING);
         $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
-        $service->executeTask($service->mapEntityToTask($task));
-        $request->getSession()->getFlashBag()->add('alert', 'Task was executed');
+        $request->getSession()->getFlashBag()->add('warning', sprintf('Task #%s was set to waiting', $task->getId()));
+
 
         return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
     }
@@ -70,9 +75,16 @@ class QueueController extends Controller
      */
     public function cancelAction(Request $request, QueuedTask $task)
     {
+        if ($task->isCancelled() || $task->isRunning()) {
+            $request->getSession()->getFlashBag()->add('error', 'Task cannot be cancelled.');
+
+            return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
+        }
         $task->dropState();
         $task->setState(QueuedTask::STATE_CANCELLED);
         $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
+        $request->getSession()->getFlashBag()->add('warning', sprintf('Task #%s was cancelled', $task->getId()));
+
 
         return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
     }
@@ -83,12 +95,18 @@ class QueueController extends Controller
      */
     public function retryAction(Request $request, QueuedTask $task)
     {
+        if ($task->isCancelled() || $task->isRunning()) {
+            $request->getSession()->getFlashBag()->add('error', 'Task cannot be added to queue.');
+
+            return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
+        }
         $task->dropState();
         $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
 
         $service = $this->container->get('mobillogix_launchpad.queue.task_queue.service_database');
         $service->addTask($service->mapEntityToTask($task));
-        $request->getSession()->getFlashBag()->add('alert', 'Task was added to queue');
+        $request->getSession()->getFlashBag()->add('warning', sprintf('Task #%s was added to queue', $task->getId()));
+
 
         return $this->redirect($this->generateUrl('mobillogix_queue_task_index'));
     }

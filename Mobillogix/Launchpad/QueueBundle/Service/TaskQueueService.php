@@ -81,6 +81,12 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
 
             return;
         }
+
+        if ($entity->isWaiting()) {
+            $entity->addLog(sprintf('Task is waiting. Skipping.'));
+
+            return null;
+        }
         $this->queuedTaskRepository->setTaskStarted($entity, getmypid());
 
         try {

@@ -44,6 +44,12 @@ class TaskSimpleExecutorService implements TaskExecutorInterface, TaskLoggerInte
 
             return null;
         }
+
+        if ($entity->isWaiting()) {
+            $entity->addLog(sprintf('Task is waiting. Skipping.'));
+
+            return null;
+        }
         $task->execute($this->container, $this);
 
         return null;

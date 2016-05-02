@@ -22,8 +22,8 @@ mobillogix_queue_task_cancel:
     defaults:
         _controller: MobillogixLaunchpadQueueBundle:Queue:cancel
 
-mobillogix_queue_task_execute:
-    path: /queued-tasks/{id}/execute
+mobillogix_queue_task_suspend:
+    path: /queued-tasks/{id}/suspend
     methods: [GET]
     defaults:
-        _controller: MobillogixLaunchpadQueueBundle:Queue:execute
+        _controller: MobillogixLaunchpadQueueBundle:Queue:suspend
