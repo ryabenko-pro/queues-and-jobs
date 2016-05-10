@@ -103,8 +103,6 @@ class QueueController extends Controller
         $task->dropState();
         $this->container->get('mobillogix_launchpad.queue.repository.queued_task')->saveQueuedTask($task);
 
-        $service = $this->container->get('mobillogix_launchpad.queue.task_queue.service_database');
-        $service->addTask($service->mapEntityToTask($task));
         $request->getSession()->getFlashBag()->add('warning', sprintf('Task #%s was added to queue', $task->getId()));
 
 
