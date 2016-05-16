@@ -187,6 +187,14 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
     }
 
     /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * @inheritdoc
      */
     public function log(BaseTask $task, $message, $type = self::LOG_MESSAGE)
