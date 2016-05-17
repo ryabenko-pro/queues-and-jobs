@@ -17,16 +17,21 @@ abstract class BaseTask
     /** @var QueuedTask */
     protected $entity;
 
+    /** @var \DateTime */
+    protected $scheduledAt;
+
     /**
      * @param array $data
      * @param QueuedTask $entity
+     * @param \DateTime $scheduledAt
      */
-    final public function __construct($data = [], QueuedTask $entity = null)
+    final public function __construct($data = [], QueuedTask $entity = null, \DateTime $scheduledAt = null)
     {
         $this->validateData($data);
 
         $this->data = $data;
         $this->entity = $entity;
+        $this->scheduledAt = $scheduledAt;
     }
 
     /**
@@ -73,6 +78,22 @@ abstract class BaseTask
     {
         $this->entity = $entity;
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getScheduledAt()
+    {
+        return $this->scheduledAt;
+    }
+
+    /**
+     * @param \DateTime $scheduledAt
+     */
+    public function setScheduledAt($scheduledAt)
+    {
+        $this->scheduledAt = $scheduledAt;
     }
 
     /**

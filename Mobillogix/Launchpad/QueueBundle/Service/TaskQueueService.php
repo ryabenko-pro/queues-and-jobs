@@ -58,6 +58,8 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         $entity->setPriority($type->getPriority())
             ->setType($typeName)
             ->setData($task->getData());
+        
+        $entity->setScheduledAt($task->getScheduledAt());
 
         $task->setEntity($entity);
 
