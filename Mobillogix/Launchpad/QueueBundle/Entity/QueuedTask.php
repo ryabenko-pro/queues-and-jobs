@@ -96,6 +96,12 @@ class QueuedTask
      * @ORM\Column(name="pid", type="integer", nullable=true)
      */
     protected $pid;
+    
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="scheduled_at", type="datetime", nullable = true)
+     */
+    protected $scheduledAt;
 
     /**
      * @ORM\PrePersist
@@ -360,5 +366,24 @@ class QueuedTask
         $this->setState(self::STATE_NEW);
         $this->setStartedAt(null);
         $this->setFinishedAt(null);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getScheduledAt()
+    {
+        return $this->scheduledAt;
+    }
+
+    /**
+     * @param \DateTime $scheduledAt
+     * @return $this
+     */
+    public function setScheduledAt($scheduledAt)
+    {
+        $this->scheduledAt = $scheduledAt;
+
+        return $this;
     }
 }

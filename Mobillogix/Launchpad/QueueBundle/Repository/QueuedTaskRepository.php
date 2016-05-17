@@ -63,6 +63,8 @@ class QueuedTaskRepository extends EntityRepository
 
         $qb->where('qt.state = :new')
             ->setParameter('new', QueuedTask::STATE_NEW)
+            ->andWhere('qt.scheduledAt IS NULL OR qt.scheduledAt < :current_date')
+            ->setParameter('current_date', new \DateTime())
             ->setMaxResults($limit)
             ->orderBy('qt.createdAt');
 
