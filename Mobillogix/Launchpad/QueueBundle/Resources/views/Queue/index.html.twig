@@ -39,7 +39,9 @@
         <thead>
         <tr>
             <td colspan="4">Server time: <strong>{{ "now"|date }}</strong></td>
-            <td colspan="1" class="pagerfanta">{{ pagerfanta(tasks) }}</td>
+        </tr>
+        <tr>
+            <td colspan="4" class="pagerfanta">{{ pagerfanta(tasks) }}</td>
         </tr>
         <tr>
             <th>ID</th>
