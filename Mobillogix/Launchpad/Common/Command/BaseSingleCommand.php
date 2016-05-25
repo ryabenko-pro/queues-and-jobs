@@ -23,6 +23,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      * Delay in seconds between last and current cycles start
      */
     protected $cycleDelay;
+    protected $needToCheckStopFile = true;
 
     /** @var InputInterface */
     protected $input;
@@ -53,7 +54,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
             return;
         }
 
-        if ($this->isStopFileExists()) {
+        if ($this->isNeedToCheckStopFile() && $this->isStopFileExists()) {
             $output->writeln("Stop file is present. Exiting.");
 
             return;
@@ -107,6 +108,20 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
      */
     public function getPidFilename()
     {
+        $pidDir = $this->getPidDir();
+        // Win OS
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $pidFilename = $pidDir . "/" . str_replace(":", "-",
+                    sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id")));
+        } else {
+            $pidFilename = $pidDir . "/" . sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id"));
+        }
+
+        return $pidFilename;
+    }
+
+    private function getPidDir()
+    {
         $container = $this->getContainer();
 
         $pidDir = $this->input->getOption("pid-dir");
@@ -114,14 +129,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
             $pidDir = $container->getParameter('kernel.cache_dir');
         }
 
-        // Win OS
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $pidFilename = $pidDir . "/" . str_replace(":", "-", sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id")));
-        } else {
-            $pidFilename = $pidDir . "/" . sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id"));
-        }
-
-        return $pidFilename;
+        return $pidDir;
     }
 
     /**
@@ -155,7 +163,12 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
 
     private function isStopFileExists()
     {
-        return file_exists(sprintf("%s/%s", dirname($this->getPidFilename()), self::STOP_FILE));
+        return file_exists($this->getStopFileName());
+    }
+
+    protected function getStopFileName()
+    {
+        return sprintf("%s/%s", $this->getPidDir(), self::STOP_FILE);
     }
 
     /**
@@ -195,4 +208,8 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
         $process->run();
     }
 
+    protected function isNeedToCheckStopFile()
+    {
+        return $this->needToCheckStopFile;
+    }
 }
