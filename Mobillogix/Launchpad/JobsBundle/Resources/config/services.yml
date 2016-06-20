@@ -12,29 +12,25 @@ services:
 
   mobillogix.catalogue.repository.job:
     class: Mobillogix\Launchpad\JobsBundle\Repository\JobRepository
-    factory_service: mobillogix.catalogue.jobs_repository_factory
-    factory_method: getRepository
+    factory: ['@mobillogix.catalogue.jobs_repository_factory', getRepository]
     arguments:
       - Mobillogix\Launchpad\JobsBundle\Entity\Job
 
   mobillogix.catalogue.repository.job_type:
     class: Mobillogix\Launchpad\JobsBundle\Repository\JobTypeRepository
-    factory_service: mobillogix.catalogue.jobs_repository_factory
-    factory_method: getRepository
+    factory: ['@mobillogix.catalogue.jobs_repository_factory', getRepository]
     arguments:
       - Mobillogix\Launchpad\JobsBundle\Entity\JobType
 
   mobillogix.catalogue.repository.job_package:
     class: Mobillogix\Launchpad\JobsBundle\Repository\JobPackageRepository
-    factory_service: mobillogix.catalogue.jobs_repository_factory
-    factory_method: getRepository
+    factory: ['@mobillogix.catalogue.jobs_repository_factory', getRepository]
     arguments:
       - Mobillogix\Launchpad\JobsBundle\Entity\JobPackage
 
   mobillogix.catalogue.repository.job_event:
     class: Mobillogix\Launchpad\JobsBundle\Repository\JobEventRepository
-    factory_service: mobillogix.catalogue.jobs_repository_factory
-    factory_method: getRepository
+    factory: ['@mobillogix.catalogue.jobs_repository_factory', getRepository]
     arguments:
       - Mobillogix\Launchpad\JobsBundle\Entity\JobEvent
 
@@ -43,25 +39,25 @@ services:
     public: false
     arguments:
       - "@=service(parameter('mobillogix_jobs.entity_manager'))"
-      - %jobs.types%
+      - '%jobs.types%'
 
   job_process_persistence.service:
     class: Mobillogix\Launchpad\JobsBundle\Service\Persistence\JobProcessPersistenceService
     public: false
     arguments:
       - "@=service(parameter('mobillogix_jobs.entity_manager'))"
-      - %jobs.types%
+      - '%jobs.types%'
 
   job_planner.service:
     class: Mobillogix\Launchpad\JobsBundle\Service\JobPlannerService
     arguments:
-      - @service_container
-      - @job_persistence.service
-      - @job_process_persistence.service
-      - %jobs.types%
+      - '@service_container'
+      - '@job_persistence.service'
+      - '@job_process_persistence.service'
+      - '%jobs.types%'
 
   process_executor.service:
     class: Mobillogix\Launchpad\JobsBundle\Service\ProcessExecutorService
     arguments:
-      - @job_process_persistence.service
-      - @service_container
+      - '@job_process_persistence.service'
+      - '@service_container'

@@ -3,5 +3,5 @@ services:
   mobillogix_launchpad.queue.task_queue.service:
     class: Mobillogix\Launchpad\QueueBundle\Service\TaskSimpleExecutorService
     arguments:
-      - @service_container
-      - @logger
+      - "@service_container"
+      - "@logger"

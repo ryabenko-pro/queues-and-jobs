@@ -1,4 +1,4 @@
 jobs_dashboard:
     type: annotation
-    resource: @MobillogixLaunchpadJobsBundle/Controller/
+    resource: '@MobillogixLaunchpadJobsBundle/Controller/'
 

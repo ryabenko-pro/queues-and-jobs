@@ -2,28 +2,28 @@ mobillogix_queue_task_index:
     path: /queued-tasks
     methods: [GET]
     defaults:
-        _controller: MobillogixLaunchpadQueueBundle:Queue:index
+        _controller: 'MobillogixLaunchpadQueueBundle:Queue:index'
 
 mobillogix_queue_task_get:
     path: /queued-tasks/{id}
     methods: [GET]
     defaults:
-        _controller: MobillogixLaunchpadQueueBundle:Queue:get
+        _controller: 'MobillogixLaunchpadQueueBundle:Queue:get'
 
 mobillogix_queue_task_retry:
     path: /queued-tasks/{id}/retry
     methods: [GET]
     defaults:
-        _controller: MobillogixLaunchpadQueueBundle:Queue:retry
+        _controller: 'MobillogixLaunchpadQueueBundle:Queue:retry'
 
 mobillogix_queue_task_cancel:
     path: /queued-tasks/{id}/cancel
     methods: [GET]
     defaults:
-        _controller: MobillogixLaunchpadQueueBundle:Queue:cancel
+        _controller: 'MobillogixLaunchpadQueueBundle:Queue:cancel'
 
 mobillogix_queue_task_suspend:
     path: /queued-tasks/{id}/suspend
     methods: [GET]
     defaults:
-        _controller: MobillogixLaunchpadQueueBundle:Queue:suspend
+        _controller: 'MobillogixLaunchpadQueueBundle:Queue:suspend'

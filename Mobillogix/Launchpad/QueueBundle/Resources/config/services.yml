@@ -8,17 +8,16 @@ services:
 
   mobillogix_launchpad.queue.repository.queued_task:
     class: Mobillogix\Launchpad\QueueBundle\Repository\QueuedTaskRepository
-    factory_service: mobillogix.catalogue.queue_repository_factory
-    factory_method: getRepository
+    factory: ['@mobillogix.catalogue.queue_repository_factory', getRepository]
     arguments:
       - Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask
 
   mobillogix_launchpad.queue.task_queue.service_database:
     class: Mobillogix\Launchpad\QueueBundle\Service\TaskQueueService
     arguments:
-      - @service_container
-      - @mobillogix_launchpad.queue.repository.queued_task
-      - %mobillogix_launchpad.queue.task_types%
+      - "@service_container"
+      - "@mobillogix_launchpad.queue.repository.queued_task"
+      - "%mobillogix_launchpad.queue.task_types%"
 
   mobillogix_launchpad.queue.task_queue.service:
     alias: mobillogix_launchpad.queue.task_queue.service_database
