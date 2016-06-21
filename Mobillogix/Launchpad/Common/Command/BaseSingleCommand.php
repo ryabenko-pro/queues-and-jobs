@@ -121,7 +121,7 @@ abstract class BaseSingleCommand extends ContainerAwareCommand
             $pidFilename = $pidDir . "/" . sprintf("%s-%s.pid", $this->getName(), $this->input->getOption("single-id"));
         }
 
-        return $pidFilename;
+        return escapeshellarg($pidFilename);
     }
 
     /**
