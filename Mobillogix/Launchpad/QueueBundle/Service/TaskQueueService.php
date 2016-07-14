@@ -6,6 +6,9 @@ namespace Mobillogix\Launchpad\QueueBundle\Service;
 
 use Mobillogix\Launchpad\QueueBundle\DependencyInjection\Util\ConfigQueuedTaskType;
 use Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask;
+use Mobillogix\Launchpad\QueueBundle\Events\QueueEventNames;
+use Mobillogix\Launchpad\QueueBundle\Events\QueueExceptionEvent;
+use Mobillogix\Launchpad\QueueBundle\Exception\UnexpectedHTTPCodeException;
 use Mobillogix\Launchpad\QueueBundle\Repository\QueuedTaskRepository;
 use Mobillogix\Launchpad\QueueBundle\Exception\TaskAddException;
 use Mobillogix\Launchpad\QueueBundle\Model\BaseTask;
@@ -73,6 +76,7 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
     /**
      * Execute task. Usually from background cron command.
      * @param BaseTask $task
+     * @return null|void
      */
     public function executeTask(BaseTask $task)
     {
@@ -101,6 +105,9 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         } catch (\PHPUnit_Framework_ExpectationFailedException $exception) {
             $this->catchOutput();
             throw $exception;
+        } catch (UnexpectedHTTPCodeException $ex) {
+            $this->container->get('event_dispatcher')
+                ->dispatch(QueueEventNames::UNEXPECTED_HTTP_CODE, new QueueExceptionEvent($ex->getMessage()));
         } catch (\Exception $exception) {
             $entity->setState($entity::STATE_FAIL)
                 ->addLog($this->catchOutput(), 'info');
