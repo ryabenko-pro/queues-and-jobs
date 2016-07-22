@@ -31,7 +31,10 @@
             <tr class="task-{{ task.state }}">
                 <td>
                     <strong>{{ task.type }}</strong><br>
-                    <small>{{ task.createdAt|date }}</small>
+                    <small>Created at: {{ task.createdAt|date }}</small>
+                    {% if task.scheduledAt %}
+                        <div><small>Scheduled at: {{ task.scheduledAt|date }}</small></div>
+                    {% endif %}
                 </td>
                 <td>{{ task.state }}</td>
                 <td>
