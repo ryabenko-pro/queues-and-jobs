@@ -12,28 +12,36 @@
 
     <hr>
 
-    <table class="table table-striped table-hover">
+    <p>
+        Server time: <strong>{{ "now"|date }}</strong>
+    </p>
+    <table class="table table-striped table-hover" style="table-layout: fixed; max-width: 1140px;">
         <thead>
             <tr>
-                <td colspan="4">Server time: <strong>{{ "now"|date }}</strong></td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Restart</th>
-                <th>Wait</th>
-                <th>Cancel</th>
-                <th>Data</th>
-                <th>Log</th>
+                <th width="17%">Type</th>
+                <th width="10%">Status</th>
+                <th width="7%">Restart</th>
+                <th width="5%">Wait</th>
+                <th width="7%">Cancel</th>
+                <th width="16%">Data</th>
+                <th width="42%">Log</th>
             </tr>
         </thead>
         <tbody>
             <tr class="task-{{ task.state }}">
                 <td>
                     <strong>{{ task.type }}</strong><br>
-                    <small>{{ task.createdAt|date }}</small>
+                    <small>Created at: {{ task.createdAt|date }}</small>
+                    {% if task.scheduledAt %}
+                        <div><small>Scheduled at: {{ task.scheduledAt|date }}</small></div>
+                    {% endif %}
                 </td>
-                <td>{{ task.state }}</td>
+                <td>
+                    {{ task.state }}
+                    {% if task.state == 'new' and task.scheduledAt %}
+                        <div><small>{{ task.scheduledAt|date }}</small></div>
+                    {% endif %}
+                </td>
                 <td>
                     {% if task.cancelled or task.running %}
                         ----
