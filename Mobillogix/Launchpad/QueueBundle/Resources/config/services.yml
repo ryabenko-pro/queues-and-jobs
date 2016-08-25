@@ -19,6 +19,7 @@ services:
       - @service_container
       - @mobillogix_launchpad.queue.repository.queued_task
       - %mobillogix_launchpad.queue.task_types%
+      - @activate_logix.repository.settings
 
   mobillogix_launchpad.queue.task_queue.service:
     alias: mobillogix_launchpad.queue.task_queue.service_database

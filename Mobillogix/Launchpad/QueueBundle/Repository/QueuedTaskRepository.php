@@ -51,11 +51,11 @@ class QueuedTaskRepository extends EntityRepository
 
     /**
      * @param string[]|null $types If set - select only tasks on this types
+     * @param array $excludedTypes
      * @param int $limit
      * @return \Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask[]
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function getQueuedTasksForRun($types = null, $limit = self::RUN_TASKS_LIMIT)
+    public function getQueuedTasksForRun($types = null, $excludedTypes = [], $limit = self::RUN_TASKS_LIMIT)
     {
         $em = $this->getEntityManager();
 
@@ -71,6 +71,11 @@ class QueuedTaskRepository extends EntityRepository
         if (!is_null($types) && !empty($types)) {
             $qb->andWhere('qt.type IN (:types)')
                 ->setParameter('types', (array)$types);
+        }
+
+        if (!is_null($excludedTypes) && !empty($excludedTypes)) {
+            $qb->andWhere('qt.type NOT IN (:excluded_types)')
+                ->setParameter('excluded_types', (array)$excludedTypes);
         }
 
         $q = $qb->getQuery();

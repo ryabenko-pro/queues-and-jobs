@@ -4,6 +4,8 @@
 namespace Mobillogix\Launchpad\QueueBundle\Service;
 
 
+use Mobillogix\Activation\ActivateLogixBundle\Entity\Settings;
+use Mobillogix\Activation\ActivateLogixBundle\Repository\SettingsRepository;
 use Mobillogix\Launchpad\QueueBundle\DependencyInjection\Util\ConfigQueuedTaskType;
 use Mobillogix\Launchpad\QueueBundle\Entity\QueuedTask;
 use Mobillogix\Launchpad\QueueBundle\Repository\QueuedTaskRepository;
@@ -26,17 +28,21 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
     protected $queuedTaskRepository;
     /** @var ConfigQueuedTaskType[] */
     protected $types;
+    /** @var SettingsRepository */
+    protected $activateLogixSettingsRepository;
 
     /**
      * @param ContainerInterface $container
      * @param QueuedTaskRepository $queuedTaskRepository
      * @param ConfigQueuedTaskType[] $types
+     * @param SettingsRepository $activateLogixSettingsRepository
      */
-    function __construct($container, $queuedTaskRepository, $types)
+    function __construct($container, $queuedTaskRepository, $types, $activateLogixSettingsRepository)
     {
         $this->container = $container;
         $this->queuedTaskRepository = $queuedTaskRepository;
         $this->types = $types;
+        $this->activateLogixSettingsRepository = $activateLogixSettingsRepository;
     }
 
     /**
@@ -140,7 +146,8 @@ class TaskQueueService implements TaskExecutorInterface, TaskLoggerInterface
         /** @var BaseTask[] $tasks */
         $tasks = [];
 
-        $entities = $this->queuedTaskRepository->getQueuedTasksForRun($types);
+        $excludedTypes = $this->activateLogixSettingsRepository->getDisabledTypesBySlug(Settings::TYPE_ACTIVATE_LOGIX_ACTIONS);
+        $entities = $this->queuedTaskRepository->getQueuedTasksForRun($types, $excludedTypes);
         foreach ($entities as $entity) {
             $tasks[] = $this->mapEntityToTask($entity);
         }
